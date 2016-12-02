@@ -1,0 +1,26 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#home-loading {
+   width: 100%;
+   height: 100%;
+   /*top: 0;*/
+   left: 0;
+   /*position: fixed;*/
+   display: block;
+   z-index: 99;
+   text-align: center;
+}
+
+#home-loading-image {
+  position: absolute;
+  top: 100px;
+  left: 240px;
+  z-index: 100;
+}

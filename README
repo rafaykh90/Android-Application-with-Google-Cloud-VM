@@ -1,0 +1,112 @@
+Repository structure
+--------------------
+
+./
+  android/   - android app sources. Follows standard android app structure
+  external/  - extenal open source libraries (structure inspired by AOSP)
+  server/    - web app and backend sources. Follows standard Express structure
+  vmscripts/ - scripts used in VM instances
+
+
+Server structure
+------------------------
+
+server/bin/www
+    * Creates and starts the web server
+
+server/models/user.js
+    * Contains the mongoose schema and model definition.
+
+server/passportSetup
+    * Contains files for passport middleware implementation which are used for authentication.
+
+server/views
+    * Contains html files to be rendered to web client.
+
+server/public
+    * Has three subfolders:
+      1. Javascript files for web frontend to be placed in 'javascripts'
+      2. Style sheets for web frontend go to 'stylesheets'
+      3. Images for web front-end to be saved at 'images'
+
+server/routes/index.js
+    * Handles API calls to the backend and interact with google cloud instances.
+
+server/routes/websockify-handler.js
+    * Handles noVNC/Websockify proxying.
+
+server/db.js
+    * Used to connect backend to the mogodb server.
+
+server/app.js
+    * Creates various variables and ties them to used packages, node functionality,
+      and routes and implement error handling.
+
+
+Android client structure
+------------------------
+
+Login Screen Activity:
+    * Login screen activity shows user a login prompt after a secure log in, it
+     launches Application List activity.
+
+Application List Activity:
+    * Application list launches and manages both VMs (via backend api) and Thin
+      Client windows. On a new VM launch, a new Thin Clien Activity window is
+      created (note: there can be multiple windows open to separate VMs) with
+      proper VNC credentials (host-port-pass) tuple.
+
+Thin Client Activity:
+    * Thin Client activity starts and manages a single RFB connection via
+      librfb[binding].
+
+librfb[binding]:
+    * librfb[binding] is a wrapper that provides a consistent, easy to use, api
+      over a modified libvnc. It provides a clear JNI API, and a helper RFB
+      connection class that simplifies its use.
+    * librfb resides in external/libvncserver-LibVNCServer-0.9.10/librfbbinding
+    * modified libvnc resides in external/libvncserver-LibVNCServer-0.9.10
+
+
+Installing server
+-------------------------
+
+Prerequisites:
+    * Google Service account key
+        - https://developers.google.com/identity/protocols/application-default-credentials
+    * Inbound traffic to TCP ports 3000 and 6080 are allowed in firewall
+
+Install:
+    1. Save your Google Service account key as credentials.json in the root folder of the project
+
+    2. invoke following command in the root folder of the project
+       $ ./deploy.sh
+
+       The command uses the present working directory as the installation path. The full paths for
+       credentials.json, server and external folders are derived by the commmand from the path where
+       it was executed.
+
+    3. Navigate to http://<host>:3000/
+
+
+Installing android client
+-------------------------
+
+Prerequisites:
+    * Recent JDK in JAVA_HOME or in path
+    * Recent Android SDK in ANDROID_HOME, with license agreements accepted:
+        - SDK build tools 24.0.2
+        - SDK Platform 24
+        - Android Support Repository
+        - Google Repository
+    * Recent Android NDK in ANDROID_NDK_HOME
+
+Build and install:
+    invoke following command in the root folder of the project:
+    $ (cd ./android; ./gradlew installDebug -PBACKEND_URI="<host>" -PBACKEND_PORT=<port> )
+
+    Example
+    $ (cd ./android; ./gradlew installDebug -PBACKEND_URI="10.1.2.3" -PBACKEND_PORT=1234 )
+
+    The command will install the app to the attached device. The installed app
+    is a DEBUG version for convenience reasons.

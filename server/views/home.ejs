@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thin Client App List</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+  <script src='/javascripts/home.js'></script>
+
+</head>
+<body>
+  <div id="logout-button" class="btn btn-primary btn-block">
+    Logout
+  </div>
+  <br />
+  <ul id="app-list-container" class="list-group">
+  </ul>
+  <div id="error-container" class="alert alert-danger" style="display: none;">
+    Geolocation disabled!
+  </div>
+  <div id="info-container" class="alert alert-success" style="display: none;">
+    Location detected: CS building!
+  </div>
+  <div id="home-loading">
+    <img id="loading-image" src="/images/loading.gif" alt="Loading..." />
+  </div>
+</body>
+</html>

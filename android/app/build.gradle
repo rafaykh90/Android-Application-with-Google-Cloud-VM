@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '24.0.2'
+
+    defaultConfig {
+        applicationId "fi.hut.niksula.mcc_2016_g05_p1"
+        minSdkVersion 17
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        externalNativeBuild {
+            ndkBuild {
+                arguments "-j4"
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildTypes.each {
+        def backendURI = "130.211.59.168"
+        def backendPort = 8080
+
+        if (project.hasProperty("BACKEND_URI")) {
+            backendURI = project.getProperty("BACKEND_URI")
+        }
+        if (project.hasProperty("BACKEND_PORT")) {
+            backendPort = project.getProperty("BACKEND_PORT")
+        }
+
+        it.buildConfigField "String", "BACKEND_URI", String.format("\"%s\"", backendURI) // totally legit string escaping :^)
+        it.buildConfigField "int", "BACKEND_PORT", "" + backendPort
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path '../../external/libvncserver-LibVNCServer-0.9.10/jni/Android.mk'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    //compile 'com.google.android.gms:play-services:9.6.0'
+    compile 'com.google.android.gms:play-services-location:9.0.2'
+}
